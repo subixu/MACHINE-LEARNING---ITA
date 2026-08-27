@@ -1,0 +1,24 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+data = {
+    'Year': [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022],
+    'Kilometers': [80000, 70000, 60000, 50000, 40000, 30000, 20000, 10000],
+    'Price': [400000, 450000, 500000, 600000, 700000, 800000, 900000, 1000000]
+}
+
+df = pd.DataFrame(data)
+
+X = df[['Year', 'Kilometers']]
+y = df['Price']
+
+model = LinearRegression()
+
+model.fit(X, y)
+
+sample = [[2023, 8000]]
+
+prediction = model.predict(sample)
+
+print("Predicted Car Price:", prediction[0])
