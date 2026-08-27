@@ -1,0 +1,34 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
+data = {
+    'Area': [800, 1000, 1200, 1500, 1800, 2000, 2200, 2500],
+    'Bedrooms': [2, 2, 3, 3, 3, 4, 4, 5],
+    'Age': [20, 15, 12, 10, 8, 6, 5, 3],
+    'Price': [2000000, 2500000, 3000000, 3800000, 4500000, 5200000, 5800000, 6500000]
+}
+
+df = pd.DataFrame(data)
+
+X = df[['Area', 'Bedrooms', 'Age']]
+y = df['Price']
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=42
+)
+
+model = LinearRegression()
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Actual:", y_test.values)
+print("Predicted:", y_pred)
+print("MSE:", mean_squared_error(y_test, y_pred))
+
+sample = [[1600, 3, 5]]
+
+print("Predicted House Price:", model.predict(sample)[0])
