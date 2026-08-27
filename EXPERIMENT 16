@@ -1,0 +1,38 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score, confusion_matrix
+
+data = {
+    'Income': [25000, 30000, 35000, 45000, 50000, 60000, 70000, 80000, 90000, 100000],
+    'Age': [22, 25, 28, 30, 35, 40, 45, 50, 55, 60],
+    'CreditScore': [500, 520, 550, 600, 650, 700, 720, 750, 800, 850],
+    'LoanApproved': [0, 0, 0, 0, 1, 1, 1, 1, 1, 1]
+}
+
+df = pd.DataFrame(data)
+
+X = df[['Income', 'Age', 'CreditScore']]
+y = df['LoanApproved']
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+model = GaussianNB()
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Actual:", y_test.values)
+print("Predicted:", y_pred)
+
+print("Accuracy:", accuracy_score(y_test, y_pred) * 100, "%")
+
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+sample = [[65000, 35, 720]]
+
+print("Loan Prediction:", model.predict(sample)[0])
