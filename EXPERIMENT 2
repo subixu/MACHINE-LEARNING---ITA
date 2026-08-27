@@ -1,0 +1,55 @@
+import pandas as pd
+
+data = {
+    'Sky': ['Sunny', 'Sunny', 'Rainy', 'Sunny'],
+    'Temperature': ['Warm', 'Warm', 'Cold', 'Warm'],
+    'Humidity': ['Normal', 'High', 'High', 'High'],
+    'Wind': ['Strong', 'Strong', 'Strong', 'Weak'],
+    'EnjoySport': ['Yes', 'Yes', 'No', 'Yes']
+}
+
+df = pd.DataFrame(data)
+df.to_csv('training_data.csv', index=False)
+
+data = pd.read_csv('training_data.csv')
+
+attributes = list(data.columns[:-1])
+
+S = ['Ø'] * len(attributes)
+G = [['?'] * len(attributes)]
+
+for _, row in data.iterrows():
+    x = list(row[:-1])
+    label = row.iloc[-1]
+
+    if label == 'Yes':
+        G = [g for g in G if all(g[i] == '?' or g[i] == x[i] or g[i] == S[i] for i in range(len(attributes)))]
+
+        for i in range(len(attributes)):
+            if S[i] == 'Ø':
+                S[i] = x[i]
+            elif S[i] != x[i]:
+                S[i] = '?'
+
+        G = [g for g in G if all(g[i] == '?' or g[i] == S[i] for i in range(len(attributes)))]
+
+    else:
+        new_G = []
+
+        for g in G:
+            for i in range(len(attributes)):
+                if g[i] == '?':
+                    for value in data[attributes[i]].unique():
+                        if value != x[i]:
+                            new_g = g.copy()
+                            new_g[i] = value
+                            new_G.append(new_g)
+
+        G = new_G
+
+print("Specific Boundary (S):")
+print(S)
+
+print("\nGeneral Boundary (G):")
+for g in G:
+    print(g)
