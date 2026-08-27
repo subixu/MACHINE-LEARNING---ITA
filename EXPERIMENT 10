@@ -1,0 +1,21 @@
+import numpy as np
+from sklearn.mixture import GaussianMixture
+
+X = np.array([
+    [1], [2], [2], [3], [8], [9], [10], [11]
+])
+
+model = GaussianMixture(n_components=2, random_state=42)
+
+model.fit(X)
+
+labels = model.predict(X)
+
+print("Data:")
+print(X.ravel())
+
+print("Cluster Labels:")
+print(labels)
+
+print("Cluster Means:")
+print(model.means_.ravel())
